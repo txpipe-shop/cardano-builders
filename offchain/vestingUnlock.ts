@@ -28,16 +28,27 @@ lucid.selectWalletFromSeed(seed);
 const validator = new VestingVestingSpend();
 const validatorAddress = lucid.newScript(validator).toAddress();
 
-const scriptsUtxo = await lucid.utxosAt(validatorAddress);
-const currentTime = Date.now() ;
-console.log("Current time (in unix): ", currentTime);
-const utxos = scriptsUtxo.filter((utxo) => {
-  const datum = Data.from(utxo.datum ?? "", VestingVestingSpend.datum);
-  return (
-    datum.beneficiary === beneficiaryPublicKeyHash &&
-    datum.lockUntil <= currentTime
-  );
-});
+const currentTime = Date.now();
+const utxos = (await lucid.utxosAt(validatorAddress)).filter(
+  ({ txHash, outputIndex, datum }) => {
+    if (!datum) {
+      console.warn(`UTxO without datum found: ${txHash}#${outputIndex}`);
+      return false;
+    }
+    try {
+      const { beneficiary, lockUntil } = Data.from(
+        datum,
+        VestingVestingSpend.datum
+      );
+      return (
+        beneficiary === beneficiaryPublicKeyHash && lockUntil <= currentTime
+      );
+    } catch (_e) {
+      console.warn(`UTxO with invalid datum found: ${txHash}#${outputIndex}`);
+      return false;
+    }
+  }
+);
 
 if (utxos.length === 0) {
   console.log("No redeemable utxo found. You need to wait a little longer...");
