@@ -25,7 +25,7 @@ In typical dApp fashion, there is an offchain and an onchain. In the `offchain` 
 
 ## Setup 
 
-To run this example we need [Deno][1], for the offchain code. The validator compiled code is already included, but to make modifications, you need to install [Aiken][2]. We also need a key for the [Blockfrost][3] Cardano preview API, which can be obtained in their website.
+To run this example we need [Deno][1], for the offchain code. The validator compiled code is already included, but to make modifications, you need to install [Aiken][2]. We also need a key for the [Blockfrost][3] Cardano preprod API, which can be obtained in their website.
 
 We also need to make a `.env` file in the [`offchain` directory](./offchain/), with the following keys:
 
@@ -34,10 +34,10 @@ OWNER=
 SEED=
 BENEFICIARY=
 SEED_B=
-PREVIEW_BLOCKFROST_KEY=
+PREPROD_BLOCKFROST_KEY=
 ```
 
-The `OWNER` and `BENEFICIARY` keys correspond to Cardano addresses, and `SEED` and `SEED_B` are the seed phrases for the Owner and Beneficiary respectively. `PREVIEW_BLOCKFROST_KEY` corresponds to the Blockfrost key mentioned previously.
+The `OWNER` and `BENEFICIARY` keys correspond to Cardano addresses, and `SEED` and `SEED_B` are the seed phrases for the Owner and Beneficiary respectively. `PREPROD_BLOCKFROST_KEY` corresponds to the Blockfrost key mentioned previously.
 
 ## Run the example
 

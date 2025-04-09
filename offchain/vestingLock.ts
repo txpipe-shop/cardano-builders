@@ -17,8 +17,8 @@ const beneficiaryPublicKeyHash =
 
 const lucid = new Lucid({
   provider: new Blockfrost(
-    "https://cardano-preview.blockfrost.io/api/v0",
-    Deno.env.get("PREVIEW_BLOCKFROST_KEY")
+    "https://cardano-preprod.blockfrost.io/api/v0",
+    Deno.env.get("PREPROD_BLOCKFROST_KEY")
   ),
 });
 const seed = Deno.env.get("SEED");
@@ -50,9 +50,10 @@ const signedTx = await txLock.sign().commit();
 
 const tx = await signedTx.submit();
 
+console.log("Awaiting tx confirmation...");
+
 await lucid.awaitTx(tx);
 
-console.log(`1 tADA locked into the contract
-    Tx ID: ${tx}
-    Datum: ${datum}
-`);
+console.log('1 tADA locked into the contract');
+console.log(`Tx Id: ${tx}`);
+console.log('Datum:', datum);
