@@ -50,14 +50,12 @@ deno run --allow-env --env vestingLock.ts
 After a few minutes, the beneficiary will be able to unlock the funds running the following command:
 
 ```bash
-deno run --allow-env --env vestingLock.ts
+deno run --allow-env --env vestingUnlock.ts
 ```
 
 ## Resources
 
 Find more on the [Aiken's user manual](https://aiken-lang.org).
-
-### References
 
 [1]: https://deno.com/
 [2]: https://aiken-lang.org
