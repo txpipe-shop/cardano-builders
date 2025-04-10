@@ -16,10 +16,10 @@ const beneficiaryPublicKeyHash =
 const lucid = new Lucid({
   provider: new Blockfrost(
     "https://cardano-preprod.blockfrost.io/api/v0",
-    Deno.env.get("PREPROD_BLOCKFROST_KEY")
+    "preprod5Khk9WnIQMDLlnkZDimpStXxtXO4CHSK"
   ),
 });
-const seed = Deno.env.get("SEED_B");
+const seed = Deno.env.get("SEED_BENEFICIARY");
 
 if (!seed) throw Error("Unable to read wallet's seed from env");
 
@@ -28,7 +28,8 @@ lucid.selectWalletFromSeed(seed);
 const validator = new VestingVestingSpend();
 const validatorAddress = lucid.newScript(validator).toAddress();
 
-const currentTime = Date.now();
+const currentTime = Date.now() - 60 * 1000; // subtract 1 minute
+
 const utxos = (await lucid.utxosAt(validatorAddress)).filter(
   ({ txHash, outputIndex, datum }) => {
     if (!datum) {
@@ -72,6 +73,4 @@ console.log("Awaiting tx confirmation...");
 
 await lucid.awaitTx(tx);
 
-console.log(`1 tADA recovered from the contract
-    Tx ID: ${tx}
-`);
+console.log(`\n\tADAs recovered from the contract\n\tTx ID: ${tx}\n`);

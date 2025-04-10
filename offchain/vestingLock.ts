@@ -18,10 +18,10 @@ const beneficiaryPublicKeyHash =
 const lucid = new Lucid({
   provider: new Blockfrost(
     "https://cardano-preprod.blockfrost.io/api/v0",
-    Deno.env.get("PREPROD_BLOCKFROST_KEY")
+    "preprod5Khk9WnIQMDLlnkZDimpStXxtXO4CHSK"
   ),
 });
-const seed = Deno.env.get("SEED");
+const seed = Deno.env.get("SEED_OWNER");
 
 if (!seed) throw Error("Unable to read wallet's seed from env");
 
@@ -42,7 +42,7 @@ const txLock = await lucid
   .payToContract(
     validatorAddress,
     { Inline: Data.to(datum, VestingVestingSpend.datum) },
-    {}
+    { lovelace: 3_000_000n } // 3 ADA
   )
   .commit();
 
@@ -54,6 +54,6 @@ console.log("Awaiting tx confirmation...");
 
 await lucid.awaitTx(tx);
 
-console.log('1 tADA locked into the contract');
-console.log(`Tx Id: ${tx}`);
-console.log('Datum:', datum);
+console.log(`\n\t3 tADA locked into the contract\n\tTx Id: ${tx}\n`);
+console.log("Datum:");
+console.dir(datum, { depth: null });

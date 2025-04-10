@@ -5,6 +5,6 @@ onchain/build/
 # Aiken's default documentation export
 onchain/docs/
 
-offchain/.env
 .github/workflows/continuous-integration.yml
 .vscode/settings.json
+
