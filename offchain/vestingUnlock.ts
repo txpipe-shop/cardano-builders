@@ -2,6 +2,7 @@ import {
   Addresses,
   Blockfrost,
   Data,
+  UTxO,
   Lucid,
 } from "https://deno.land/x/lucid@0.20.5/mod.ts";
 import { VestingVestingSpend } from "../onchain/plutus.ts";
@@ -30,6 +31,22 @@ const validatorAddress = lucid.newScript(validator).toAddress();
 
 const currentTime = Date.now() - 60 * 1000; // subtract 1 minute
 
+const printVestings = (utxos : UTxO[]) => {
+  for (let i = 0; i < utxos.length; i++) {
+    console.log("============ Vesting #" + i + " ============ ");
+    console.dir({
+      TxHash: utxos[i].txHash,
+      Index: utxos[i].outputIndex,
+      Assets: utxos[i].assets,
+      CBORDatum: utxos[i].datum,
+      TypedDatum: Data.from(
+        utxos[i].datum,
+        VestingVestingSpend.datum
+      ),
+    });
+  }
+}
+
 const utxos = (await lucid.utxosAt(validatorAddress)).filter(
   ({ txHash, outputIndex, datum }) => {
     if (!datum) {
@@ -37,12 +54,12 @@ const utxos = (await lucid.utxosAt(validatorAddress)).filter(
       return false;
     }
     try {
-      const { beneficiary, lockUntil } = Data.from(
+      const { beneficiary } = Data.from(
         datum,
         VestingVestingSpend.datum
       );
       return (
-        beneficiary === beneficiaryPublicKeyHash && lockUntil <= currentTime
+        beneficiary === beneficiaryPublicKeyHash
       );
     } catch (_e) {
       console.warn(`UTxO with invalid datum found: ${txHash}#${outputIndex}`);
@@ -55,7 +72,11 @@ if (utxos.length === 0) {
   console.log("No redeemable utxo found. You need to wait a little longer...");
   Deno.exit(1);
 }
-const laterTime = new Date(currentTime + 2 * 60 * 60 * 1000).getTime(); // add two hours (TTL: time to live)
+
+printVestings(utxos);
+
+// add two hours (TTL: time to live)
+const laterTime = new Date(currentTime + 2 * 60 * 60 * 1000).getTime();
 const txUnlock = await lucid
   .newTx()
   .collectFrom(utxos, Data.void())
