@@ -6,6 +6,12 @@ import {
   Lucid,
 } from "https://deno.land/x/lucid@0.20.5/mod.ts";
 import { VestingVestingSpend } from "../onchain/plutus.ts";
+import * as readline from 'node:readline';
+
+const rl = readline.createInterface({
+  input: process.stdin,
+  output: process.stdout
+});
 
 const beneficiaryAddress = Deno.env.get("BENEFICIARY");
 if (!beneficiaryAddress)
@@ -73,25 +79,35 @@ if (utxos.length === 0) {
   Deno.exit(1);
 }
 
-printVestings(utxos);
+printVestings(utxos)
 
-// add two hours (TTL: time to live)
-const laterTime = new Date(currentTime + 2 * 60 * 60 * 1000).getTime();
-const txUnlock = await lucid
-  .newTx()
-  .collectFrom(utxos, Data.void())
-  .addSigner(beneficiaryPublicKeyHash)
-  .validFrom(currentTime)
-  .validTo(laterTime)
-  .attachScript(validator)
-  .commit();
+console.log("====================================");
 
-const signedTx = await txUnlock.sign().commit();
+rl.question('Pick a Vesting: ', async (input) => {
+  const index = parseInt(input);
 
-const tx = await signedTx.submit();
+  if (isNaN(index) || index < 0 || index >= utxos.length) {
+    console.log('Invalid selection.');
+  } else {
+    console.log(`You picked: ${utxos[index].txHash}`);
 
-console.log("Awaiting tx confirmation...");
+    // add two hours (TTL: time to live)
+    const laterTime = new Date(currentTime + 2 * 60 * 60 * 1000).getTime();
+    const txUnlock = await lucid
+      .newTx()
+      .collectFrom([utxos[index]], Data.void())
+      .addSigner(beneficiaryPublicKeyHash)
+      .validFrom(currentTime)
+      .validTo(laterTime)
+      .attachScript(validator)
+      .commit();
 
-await lucid.awaitTx(tx);
+    const signedTx = await txUnlock.sign().commit();
+    const tx = await signedTx.submit();
 
-console.log(`\n\tADAs recovered from the contract\n\tTx ID: ${tx}\n`);
+    console.log(`\nADAs recovered from the contract\nTx ID: ${tx}\n`);
+    console.log(`\nhttps://preprod.cexplorer.io/tx/${tx}\n`);
+  }
+
+  rl.close();
+});
