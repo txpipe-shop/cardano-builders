@@ -7,4 +7,4 @@ onchain/docs/
 
 .github/workflows/continuous-integration.yml
 .vscode/settings.json
-
+.env
