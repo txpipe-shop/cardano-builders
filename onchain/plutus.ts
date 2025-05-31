@@ -1,11 +1,11 @@
 // deno-lint-ignore-file
 import {
   applyParamsToScript,
-  Data as LucidData,
+  Data,
   Script,
-} from "https://deno.land/x/lucid@0.20.9/mod.ts";
+} from "https://deno.land/x/lucid@0.20.5/mod.ts";
 
-export type Data = LucidData;
+export type Data = Data;
 export type Int = bigint;
 export type AikenCryptoVerificationKeyHash = string;
 export type VestingVestingDatum = {
