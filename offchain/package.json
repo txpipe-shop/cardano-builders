@@ -3,11 +3,13 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate-blaze-blueprint": "npx tsx ./gen-blueprint.ts"
   },
   "author": "",
   "license": "ISC",
   "description": "",
+  "type": "module",
   "dependencies": {
     "@blaze-cardano/blueprint": "^0.6.1",
     "@blaze-cardano/core": "^0.6.4",

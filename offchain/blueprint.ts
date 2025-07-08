@@ -1,0 +1,53 @@
+/* eslint-disable */
+// @ts-nocheck
+import { applyParamsToScript, cborToScript, Core } from "@blaze-cardano/sdk"
+type Script = Core.Script;
+const Script = Core.Script;
+type PlutusData = Core.PlutusData;
+const PlutusData = Core.PlutusData;
+type Data = PlutusData;
+type Int = bigint;
+type ByteArray = string;
+type OutputReference = Core.TransactionInput;
+
+const Contracts = Type.Module({
+  VestingDatum: Type.Object({
+    lock_until: Type.BigInt(),
+    owner: Type.String(),
+    beneficiary: Type.String(),
+  }, { ctor: 0n }),
+});
+
+export const VestingDatum = Contracts.Import("VestingDatum");
+export type VestingDatum = Exact<typeof VestingDatum>;
+
+export class VestingVestingSpend {
+  public Script: Script
+  constructor() {
+    this.Script = cborToScript(
+      applyParamsToScript(
+        "59018d01010029800aba2aba1aba0aab9faab9eaab9dab9a488888896600264653001300800198041804800cdc3a400530080024888966002600460106ea800e2646644b30013370e900018059baa0018cc004c03cc030dd5000c8c040c044c044c044c044c044c044c044c04400644646600200200644b30010018a508acc004cdc79bae30130010038a51899801001180a000a01c40449112cc004cc004dd6180118079baa007375c60246026601e6ea800e29462b30013300137586004601e6ea801cdd718091809980998079baa003899191919912cc004c034c04cdd50014566002601a60266ea8c05cc06000e266e20004dd6980b980a1baa002899b89001375a602e60286ea8009012452820243015001375a602a60246ea8018cc04cc050004cc04e6002601460206ea8c050c05400698103d87a8000a60103d8798000403c97ae030103754602660206ea8004c048c04cc04cc04cc04cc04cc04cc04cc03cdd5003c528201a40348b2014300d001300d300e0013009375400716401c300800130033754011149a26cac8009",
+        Type.Tuple([
+        ]),
+        [
+        ],
+      ),
+      "PlutusV3"
+    );
+  }
+}
+export class VestingVestingElse {
+  public Script: Script
+  constructor() {
+    this.Script = cborToScript(
+      applyParamsToScript(
+        "59018d01010029800aba2aba1aba0aab9faab9eaab9dab9a488888896600264653001300800198041804800cdc3a400530080024888966002600460106ea800e2646644b30013370e900018059baa0018cc004c03cc030dd5000c8c040c044c044c044c044c044c044c044c04400644646600200200644b30010018a508acc004cdc79bae30130010038a51899801001180a000a01c40449112cc004cc004dd6180118079baa007375c60246026601e6ea800e29462b30013300137586004601e6ea801cdd718091809980998079baa003899191919912cc004c034c04cdd50014566002601a60266ea8c05cc06000e266e20004dd6980b980a1baa002899b89001375a602e60286ea8009012452820243015001375a602a60246ea8018cc04cc050004cc04e6002601460206ea8c050c05400698103d87a8000a60103d8798000403c97ae030103754602660206ea8004c048c04cc04cc04cc04cc04cc04cc04cc03cdd5003c528201a40348b2014300d001300d300e0013009375400716401c300800130033754011149a26cac8009",
+        Type.Tuple([
+        ]),
+        [
+        ],
+      ),
+      "PlutusV3"
+    );
+  }
+}
