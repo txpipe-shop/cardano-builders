@@ -1,0 +1,43 @@
+diff --git a/crates/tx3-cardano/src/compile/mod.rs b/crates/tx3-cardano/src/compile/mod.rs
+index 9439ef2..b19b4f5 100644
+--- a/crates/tx3-cardano/src/compile/mod.rs
++++ b/crates/tx3-cardano/src/compile/mod.rs
+@@ -632,7 +632,7 @@ fn compile_witness_set(
+ 
+ fn infer_plutus_version(_transaction_body: &primitives::TransactionBody) -> PlutusVersion {
+     // TODO: infer plutus version from existing scripts
+-    1
++    2
+ }
+ 
+ fn compute_script_data_hash(
+diff --git a/crates/tx3-cardano/src/compile/plutus_data.rs b/crates/tx3-cardano/src/compile/plutus_data.rs
+index c7f30b0..e6ce373 100644
+--- a/crates/tx3-cardano/src/compile/plutus_data.rs
++++ b/crates/tx3-cardano/src/compile/plutus_data.rs
+@@ -41,7 +41,7 @@ impl IntoData for PlutusData {
+ 
+ impl IntoData for bool {
+     fn as_data(&self) -> PlutusData {
+-        PlutusData::BoundedBytes(BoundedBytes::from(vec![*self as u8]))
++        constr(*self as u64, vec![])
+     }
+ }
+ 
+diff --git a/crates/tx3-lang/src/applying.rs b/crates/tx3-lang/src/applying.rs
+index 4de93d1..1bbca8b 100644
+--- a/crates/tx3-lang/src/applying.rs
++++ b/crates/tx3-lang/src/applying.rs
+@@ -59,7 +59,11 @@ impl Indexable for ir::Expression {
+             ir::Expression::Address(_) => None,
+             ir::Expression::Hash(_) => None,
+             ir::Expression::UtxoRefs(_) => None,
+-            ir::Expression::UtxoSet(_) => None,
++            ir::Expression::UtxoSet(x) => x
++                .iter()
++                .next()
++                .and_then(|x| x.datum.clone())
++                .and_then(|datum| datum.index(index)),
+             ir::Expression::Assets(_) => None,
+             ir::Expression::EvalParameter(_, _) => None,
+             ir::Expression::EvalInput(_) => None,

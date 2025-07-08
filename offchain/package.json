@@ -1,0 +1,20 @@
+{
+  "name": "cardano-dev-tx3",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "@blaze-cardano/blueprint": "^0.6.1",
+    "@blaze-cardano/core": "^0.6.4",
+    "@blaze-cardano/data": "^0.6.0",
+    "@blaze-cardano/sdk": "^0.2.33",
+    "@utxorpc/blaze-provider": "^0.3.6",
+    "tsx": "^4.20.3",
+    "tx3-sdk": "^0.3.0"
+  }
+}

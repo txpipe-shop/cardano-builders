@@ -8,3 +8,4 @@ onchain/docs/
 .github/workflows/continuous-integration.yml
 .vscode/settings.json
 offchain/.env
+offchain/node_modules
