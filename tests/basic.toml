@@ -1,0 +1,20 @@
+file = "./main.tx3"
+
+[[wallets]]
+name = "bob"
+balance = 10000000
+
+[[wallets]]
+name = "alice"
+balance = 5000000
+
+[[transactions]]
+description = "bob locks 2 ada"
+template = "lock"
+signers = ["bob"]
+args = { quantity = 2000000, until = 1000, owner = "@bob" }
+
+[[expect]]
+type = "Balance"
+wallet = "vault"
+amount = 2000000

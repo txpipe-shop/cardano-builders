@@ -1,0 +1,64 @@
+// This file is auto-generated.
+
+import { Client as TRPClient, type ClientOptions, type TxEnvelope } from 'tx3-sdk/trp';
+
+export const DEFAULT_TRP_ENDPOINT = "http://localhost:3000/trp";
+
+export const DEFAULT_HEADERS = {
+};
+
+export const DEFAULT_ENV_ARGS = {
+};
+
+export type LockParams = {
+    beneficiary: string;
+    owner: string;
+    quantity: number;
+    until: number;
+}
+
+export const LOCK_IR = {
+    bytecode: "0d03000106736f757263650d0206736f757263650d01056f776e6572050c0100000d01087175616e746974790200000002041c0e1470667b6c1ad3fb65e4cccfbfd8dd1d687be97a4192c05b8521a40300030d0105756e74696c020d01056f776e6572050d010b62656e6566696369617279050c0100000d01087175616e74697479020d01056f776e657205000e020e020f010d0206736f757263650d01056f776e6572050c0100000d01087175616e7469747902000c0100000d01087175616e74697479020d03000000000000",
+    encoding: "hex",
+    version: "v1alpha6",
+};
+
+export type UnlockParams = {
+    beneficiary: string;
+    lockedUtxo: string;
+    vaultScript: Uint8Array;
+}
+
+export const UNLOCK_IR = {
+    bytecode: "0d03000206736f757263650d0206736f75726365041c0e1470667b6c1ad3fb65e4cccfbfd8dd1d687be97a4192c05b8521a4000d010b6c6f636b65645f7574786f070001055661756c74041c0e1470667b6c1ad3fb65e4cccfbfd8dd1d687be97a4192c05b8521a4000d010c7661756c745f73637269707404036761730d02036761730d010b62656e6566696369617279050d03000000010d010b62656e656669636961727905000e020f010d0206736f75726365041c0e1470667b6c1ad3fb65e4cccfbfd8dd1d687be97a4192c05b8521a4000d010b6c6f636b65645f7574786f070d030000010e706c757475735f7769746e657373020673637269707404fb900159018d01010029800aba2aba1aba0aab9faab9eaab9dab9a488888896600264653001300800198041804800cdc3a400530080024888966002600460106ea800e2646644b30013370e900018059baa0018cc004c03cc030dd5000c8c040c044c044c044c044c044c044c044c04400644646600200200644b30010018a508acc004cdc79bae30130010038a51899801001180a000a01c40449112cc004cc004dd6180118079baa007375c60246026601e6ea800e29462b30013300137586004601e6ea801cdd718091809980998079baa003899191919912cc004c034c04cdd50014566002601a60266ea8c05cc06000e266e20004dd6980b980a1baa002899b89001375a602e60286ea8009012452820243015001375a602a60246ea8018cc04cc050004cc04e6002601460206ea8c050c05400698103d87a8000a60103d8798000403c97ae030103754602660206ea8004c048c04cc04cc04cc04cc04cc04cc04cc03cdd5003c528201a40348b2014300d001300d300e0013009375400716401c300800130033754011149a26cac80090776657273696f6e0506000000",
+    encoding: "hex",
+    version: "v1alpha6",
+};
+
+export class Client {
+    readonly #client: TRPClient;
+
+    constructor(options: ClientOptions) {
+        this.#client = new TRPClient(options);
+    }
+
+    async lockTx(args: LockParams): Promise<TxEnvelope> {
+        return await this.#client.resolve({
+            tir: LOCK_IR,
+            args,
+        });
+    }
+    async unlockTx(args: UnlockParams): Promise<TxEnvelope> {
+        return await this.#client.resolve({
+            tir: UNLOCK_IR,
+            args,
+        });
+    }
+}
+
+// Create a default client instance
+export const protocol = new Client({
+    endpoint: DEFAULT_TRP_ENDPOINT,
+    headers: DEFAULT_HEADERS,
+    envArgs: DEFAULT_ENV_ARGS,
+});
