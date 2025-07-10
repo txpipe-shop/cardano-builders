@@ -2,19 +2,31 @@ file = "./main.tx3"
 
 [[wallets]]
 name = "bob"
-balance = 10000000
+balance = 100000000
 
 [[wallets]]
 name = "alice"
-balance = 5000000
+balance = 50000000
 
 [[transactions]]
 description = "bob locks 2 ada"
 template = "lock"
 signers = ["bob"]
-args = { quantity = 2000000, until = 1000, owner = "@bob" }
+args = { quantity = 2000000, until = 1000, owner = "@bob", beneficiary= "@alice" }
+
+[[transactions]]
+description = "alice unlocks 2 ada"
+template = "unlock"
+signers = ["alice"]
+args = { beneficiary = "@alice", owner = "@bob", locked_utxo = "14913065e1388c7c4baeb11718c9bbc7d37215a52bf39ee1f660da5445abb3b8#0" }
 
 [[expect]]
 type = "Balance"
-wallet = "vault"
-amount = 2000000
+wallet = "alice"
+amount = 6632431
+
+[[expect]]
+type = "Balance"
+wallet = "bob"
+amount = { target = 91630891, threshold = 100000 }
+

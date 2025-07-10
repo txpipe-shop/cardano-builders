@@ -5,8 +5,7 @@
   "main": "dist/protocol.js",
   "types": "dist/protocol.d.ts",
   "scripts": {
-    "build": "tsc",
-    "start": "tsx index.ts"
+    "build": "tsc"
   },
   "dependencies": {
     "tx3-sdk": "^0.2.0"
