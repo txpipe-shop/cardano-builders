@@ -37,13 +37,13 @@ tx lock(
 }
 
 tx unlock(
-    locked_utxo: UtxoRef,
-    collateral_utxo: UtxoRef,
+    locked: UtxoRef,
 ) {
     input source {
-        ref: locked_utxo,
-        redeemer: (),
+        from: Vault,
+        ref: locked,
         datum_is: VestingParams,
+        redeemer: (),
     }
 
     input gas {
@@ -51,13 +51,14 @@ tx unlock(
         min_amount: fees,
     }
 
+    collateral {
+        from: Beneficiary,
+        min_amount: fees,
+    }
+    
     output {
         to: Beneficiary,
         amount: source + gas - fees,
-    }
-
-    collateral {
-        ref: collateral_utxo,
     }
 
     signers {
