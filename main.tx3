@@ -1,0 +1,73 @@
+party Owner;
+
+party Beneficiary;
+
+policy Vault = 0xf8e3ca438e81623f59539c8d5ca14a15bccd54b299538c8d32fd71a6;
+
+type VestingParams {
+  lock_until: Int,
+  owner: Bytes,
+  beneficiary: Bytes,
+}
+
+tx lock(
+    quantity: Int,
+    until: Int,
+) {
+    input source {
+        from: Owner,
+        min_amount: Ada(quantity),
+    }
+
+    output {
+        to: Vault,
+        amount: Ada(quantity),
+        datum: VestingParams {
+            lock_until: until,
+            owner: Owner,
+            beneficiary: Beneficiary,
+        },
+    }
+
+    output {
+        to: Owner,
+        amount: source - Ada(quantity) - fees,
+    }
+
+}
+
+tx unlock(
+    locked: UtxoRef,
+) {
+    input source {
+        from: Vault,
+        ref: locked,
+        datum_is: VestingParams,
+        redeemer: (),
+    }
+
+    input gas {
+        from: Beneficiary,
+        min_amount: fees,
+    }
+
+    collateral {
+        from: Beneficiary,
+        min_amount: fees,
+    }
+    
+    output {
+        to: Beneficiary,
+        amount: source + gas - fees,
+    }
+
+    signers {
+        Beneficiary,
+    }
+
+    cardano::plutus_witness {
+        version: 2,
+        script: 0x5901d101010029800aba2aba1aba0aab9faab9eaab9dab9cab9a4888888896600264653001300900198049805000cdc3a400530090024888966002600460126ea800e2646644b30013370e900018061baa0018cc004c040c034dd5000c8c044c048c048c048c048c048c048c048c04800644646600200200644b30010018a508acc004cdc79bae30140010038a51899801001180a800a01c40489112cc004cc004dd6180118081baa007375c6026602860206ea800e29462b3001330013758600460206ea801cdd71809980a180a18081baa003899191919912cc004c034c050dd50014566002601a60286ea8c060c06400e266e20004dd6980c180a9baa002899b89001375a6030602a6ea8009012452820243016001375a602c60266ea8018cc050c054004cc0526002601460226ea8c054c058006980103d87a8000a60103d8798000403c97ae030113754602860226ea8004c04cc050c050c050c050c050c050c050c040dd5003c528201a40348a99805a491a65787065637420536f6d6528646174756d29203d20646174756d00164028601c002601c601e00260146ea800e2c8038601200260086ea8026293454cc00924011856616c696461746f722072657475726e65642066616c7365001365640041,
+
+    }
+}
